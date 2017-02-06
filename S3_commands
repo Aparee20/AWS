@@ -1,0 +1,8 @@
+aws s3 rb s3://{bucket} --force
+aws s3 sync {folder_with_files_to_upload} s3://{bucket}/ --content-type video/mp4 --acl public-read --recursive
+aws s3 sync {folder_with_files_to_upload} s3://{bucket}/ --content-type audio/mpeg --acl public-read --recursive
+aws s3 cp {folder_with_files_to_upload} s3://{bucket}/ --content-type video/mp4 --acl public-read --recursive
+aws s3 ls s3://{bucket}/
+
+aws s3 ls s3://{bucket}/ | wc -l
+aws s3 ls s3://{bucket}/ | awk '{print $1}'
