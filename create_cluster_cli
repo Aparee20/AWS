@@ -1,0 +1,124 @@
+aws emr create-cluster \
+--name "Test cluster" \
+--ami-version 3.3 --applications Name=Hue Name=Hive \
+--use-default-roles --ec2-attributes KeyName=myKey \
+--instance-type m3.xlarge --instance-count 3 \
+--steps Type=Hive,Name="Hive Program",ActionOnFailure=CONTINUE,Args=[-f,pathtohivescript,-d,INPUT=pathtoinputdata,-d,OUTPUT=pathtooutputbucket]
+
+
+aws emr create-cluster \
+--name "Test cluster" \
+--ami-version 3.3 --applications Name=Hue Name=Hive \
+--use-default-roles --ec2-attributes KeyName=bigbytes \
+--instance-type m3.xlarge --instance-count 3 \
+--steps Type=Hive,Name="Hive Program",ActionOnFailure=CONTINUE,Args=[-f,pathtohivescript,-d,INPUT=pathtoinputdata,-d,OUTPUT=pathtooutputbucket]
+
+
+
+# Create emr cluster with hive only
+aws emr create-cluster --name=emr-hive-poc --instance-type=m3.xlarge --instance-count=3 --region=ap-southeast-2 --release-label=emr-5.0.0 --ec2-attributes KeyName=bonnerca-sandbox-onboarding-ec2-2.pem --no-auto-terminate --applications Name=Hive --use-default-roles
+
+# Create emr cluster with hive and spark 
+aws emr create-cluster --name=emr-hive-spark-poc --instance-type=m3.xlarge --instance-count=2 --region=ap-southeast-2 --release-label=emr-5.0.0 --ec2-attributes KeyName=bonnerca-sandbox-onboarding-ec2-2.pem --no-auto-terminate --applications Name=Hive Name=Spark --use-default-roles
+
+# Redshift
+aws redshift create-cluster --cluster-identifier emrpocorigin --db-name=originpoc --node-type dw2.large --cluster-type single-node --master-username admin --master-user-password Password1
+
+aws emr create-cluster --name "YhatDemoCluster" --ami-version 3.3 \
+  --use-default-roles --ec2-attributes KeyName="yhat-dev" \
+  --applications Name=Hue Name=Hive Name=Pig \
+  --instance-count 4 --instance-type m3.xlarge \
+  --log-uri s3://yhat-hadoop-example/logs/ \
+  --bootstrap-action Path=s3://yhat-hadoop-example/bootstrap/bootstrap.sh
+
+aws emr create-cluster --applications Name=Hadoop Name=Hive Name=Pig Name=Hue \
+--ec2-attributes '{"InstanceProfile":"EMR_EC2_DefaultRole","SubnetId":"subnet-86464df1","EmrManagedSlaveSecurityGroup":"sg-6451f803","EmrManagedMasterSecurityGroup":"sg-6651f801"}' \
+--service-role EMR_DefaultRole 
+--release-label emr-4.4.0 
+--steps '[{"Args":["com.cs6200.A7.A7","connections","hinput=s3://$(BUCKET)/a7history/","tinput=s3://$(BUCKET)/a7test/","output=s3://$(BUCKET)/output_one/","bucket=s3://$(BUCKET)/"],"Type":"CUSTOM_JAR","ActionOnFailure":"CONTINUE","Jar":"s3://$(BUCKET)/job.jar","Properties":"","Name":"Step 1"},{"Args":["com.cs6200.A7.A7","modeling","s3://$(BUCKET)/user/yarn/hmodel/","s3://$(BUCKET)/"],"Type":"CUSTOM_JAR","ActionOnFailure":"CONTINUE","Jar":"s3://$(BUCKET)/job.jar","Properties":"","Name":"Step 2"},{"Args":["com.cs6200.A7.A7","prediction","s3://$(BUCKET)/user/yarn/tmodel/","s3://$(BUCKET)/07request/","s3://$(BUCKET)/"],"Type":"CUSTOM_JAR","ActionOnFailure":"CONTINUE","Jar":"s3://$(BUCKET)/job.jar","Properties":"","Name":"Step 3"}]' --name 'My cluster' --instance-groups '[{"InstanceCount":5,"InstanceGroupType":"CORE","InstanceType":"m3.xlarge","Name":"Core instance group - 2"},{"InstanceCount":1,"InstanceGroupType":"MASTER","InstanceType":"m3.xlarge","Name":"Master instance group - 1"}]' --auto-terminate --region us-west-2
+
+
+aws emr create-cluster \
+--release-label emr-5.0.0 \
+--use-default-roles \
+--applications Name=Hive \
+--ec2-attributes KeyName=bigbytes.pem \
+--instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m3.xlarge InstanceGroupType=CORE,InstanceCount=2,InstanceType=m3.xlarge \
+
+aws emr create-cluster \
+--name=emr-hive-execution \
+--instance-type=m3.xlarge \
+--instance-count=3 --region=ap-southeast-2 \
+--release-label=emr-5.0.0 --ec2-attributes KeyName=Aws-Emr-check.pem \
+--no-auto-terminate \
+--applications Name=Hive \
+--use-default-roles
+
+aws emr create-cluster 
+--applications Name=Hive 
+--ec2-attributes '{"KeyName":"bigbytes.pem","InstanceProfile":"EMR_EC2_DefaultRole","EmrManagedSlaveSecurityGroup":"sg-46895421","EmrManagedMasterSecurityGroup":"sg-47895420"}' \
+--service-role EMR_DefaultRole --release-label emr-5.0.0 --name 'emr-hive-execution' \
+--instance-groups '[{"InstanceCount":1,"InstanceGroupType":"MASTER","InstanceType":"m3.xlarge","Name":"MASTER"},{"InstanceCount":2,"InstanceGroupType":"CORE","InstanceType":"m3.xlarge","Name":"CORE"}]' \
+--scale-down-behavior TERMINATE_AT_TASK_COMPLETION --region ap-southeast-2
+
+aws emr create-cluster --applications Name=Hive --ec2-attributes '{"KeyName":"bigbytes.pem","InstanceProfile":"EMR_EC2_DefaultRole","EmrManagedSlaveSecurityGroup":"sg-46895421","EmrManagedMasterSecurityGroup":"sg-47895420"}' --service-role EMR_DefaultRole --release-label emr-5.0.0 --name 'emr-hive-execution' --instance-groups '[{"InstanceCount":1,"InstanceGroupType":"MASTER","InstanceType":"m3.xlarge","Name":"MASTER"},{"InstanceCount":2,"InstanceGroupType":"CORE","InstanceType":"m3.xlarge","Name":"CORE"}]' --scale-down-behavior TERMINATE_AT_TASK_COMPLETION --region ap-southeast-2
+
+# Create emr cluster with hive and spark 
+aws emr create-cluster --name=emr-hive-spark-poc --instance-type=m3.xlarge --instance-count=2 --region=ap-southeast-2 --release-label=emr-5.0.0 --ec2-attributes KeyName=bonnerca-sandbox-onboarding-ec2-2.pem --no-auto-terminate --applications Name=Hive Name=Spark --use-default-roles
+
+# Redshift
+aws redshift create-cluster --cluster-identifier emrpocorigin --db-name=originpoc --node-type dw2.large --cluster-type single-node --master-username admin --master-user-password Password123 --publicly-accessible --port 8192
+
+******-----working code
+
+aws emr create-cluster \
+--applications Name=Hive \
+--ec2-attributes '{"KeyName":"Aws-Emr-check","InstanceProfile":"EMR_EC2_DefaultRole","EmrManagedSlaveSecurityGroup":"sg-46895421","EmrManagedMasterSecurityGroup":"sg-47895420"}' \
+--service-role EMR_DefaultRole --release-label emr-5.0.0 --name 'emr-hive-execution' \
+--instance-groups '[{"InstanceCount":1,"InstanceGroupType":"MASTER","InstanceType":"m3.xlarge","Name":"MASTER"},{"InstanceCount":2,"InstanceGroupType":"CORE","InstanceType":"m3.xlarge","Name":"CORE"}]' \
+--scale-down-behavior TERMINATE_AT_TASK_COMPLETION --region ap-southeast-2
+
+aws emr list-clusters
+
+aws emr list-instances --cluster-id j-9J7T8485CQ0
+
+
+aws emr describe-cluster --cluster-id j-9J7T8485CQ0
+
+
+ssh -i Aws-Emr-check.pem hadoop@ec2-13-55-101-119.ap-southeast-2.compute.amazonaws.com
+
+
+ssh hadoop@ec2-13-54-56-66.ap-southeast-2.compute.amazonaws.com -i Aws-Emr-check.pem
+
+hive
+
+create external table employees (
+  name varchar(100),
+  gender varchar(10)
+)
+row format delimited
+fields terminated by ','
+lines terminated by '\n'
+location 's3://employee-upload/';
+
+
+ssh -i Aws-Emr-check.pem hadoop@ec2-13-54-56-66.ap-southeast-2.compute.amazonaws.com
+
+
+aws emr create-cluster --applications Name=Hive --ec2-attributes '{"KeyName":"Aws-Emr-check.pem","InstanceProfile":"EMR_EC2_DefaultRole","EmrManagedSlaveSecurityGroup":"sg-46895421","EmrManagedMasterSecurityGroup":"sg-47895420"}' --service-role EMR_DefaultRole --release-label emr-5.0.0 --name 'emr-hive-execution' --instance-groups '[{"InstanceCount":2,"InstanceGroupType":"CORE","InstanceType":"m3.xlarge","Name":"CORE"},{"InstanceCount":1,"InstanceGroupType":"MASTER","InstanceType":"m3.xlarge","Name":"MASTER"}]' --scale-down-behavior TERMINATE_AT_TASK_COMPLETION --region ap-southeast-2
+
+aws emr create-cluster 
+--termination-protected 
+--applications Name=Hadoop Name=Hive Name=Pig Name=Hue 
+--ec2-attributes '{"KeyName":"qwikLABS-L146-1020135","InstanceProfile":"EMR_EC2_DefaultRole","SubnetId":"subnet-529d9530","EmrManagedSlaveSecurityGroup":"sg-dbe063a3","EmrManagedMasterSecurityGroup":"sg-dae063a2"}' 
+--release-label emr-4.7.1 --log-uri 's3n://aws-logs-431062343646-us-west-2/elasticmapreduce/' 
+--steps '[{"Args":["hadoop-streaming","-files","s3://elasticmapreduce/samples/wordcount/wordSplitter.py","-mapper","wordSplitter.py","-reducer","aggregate","-input","s3://elasticmapreduce/samples/wordcount/input","-output","s3://emr-bucket-ankur290117/"],"Type":"CUSTOM_JAR","ActionOnFailure":"CONTINUE","Jar":"command-runner.jar","Properties":"","Name":"Word count"}]' 
+--instance-groups '[{"InstanceCount":1,"InstanceGroupType":"MASTER","InstanceType":"m3.xlarge","Name":"Master - 1"},{"InstanceCount":2,"InstanceGroupType":"CORE","InstanceType":"m3.xlarge","Name":"Core - 2"}]' 
+--auto-terminate 
+--service-role EMR_DefaultRole 
+--enable-debugging 
+--name 'My cluster' 
+--scale-down-behavior TERMINATE_AT_TASK_COMPLETION 
+--region us-west-2
+
