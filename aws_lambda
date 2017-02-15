@@ -1,0 +1,59 @@
+var doc = require('dynamodb-doc');
+var dynamo = new doc.DynamoDB();
+
+var AWS = require('aws-sdk');
+var s3 = new AWS.S3();
+
+
+//var aws = require('aws-sdk');
+//var dynamo = new AWS.DynamoDB.DocumentClient({region: 'ap-southeast-2'});
+
+exports.handler = function(event, context) {
+   // var file_path = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, ' '));
+    //var gallery = file_path.split("/")[0];
+      invnumber = 'InvC604550911';
+      Invfile = 'BOAG_InvC60455091';
+      invdate = '20170115';
+      customer_name = 'Matt'
+     //console.log($invnumber)
+     console.log('value1 =', event.key2);
+     console.log('value1 =', event.key1);
+    console.log('value2 =', event.key2);
+    console.log('value3 =', event.key3);
+    console.log('remaining time =', context.getRemainingTimeInMillis());
+    console.log('functionName =', context.functionName);
+    console.log('AWSrequestID =', context.awsRequestId);
+    console.log('logGroupName =', context.logGroupName);
+    console.log('logStreamName =', context.logStreamName);
+    console.log('clientContext =', context.clientContext);
+    
+    
+      var bucket = event
+     
+     
+     console.log('Hello');
+     console.log(bucket.key1);
+      
+     // var file = event.Records[0].s3.object.key;
+     
+     
+    
+	//var srcKey = event.Records[0].s3.object.key;
+	//var srcFilenameArr = srcKey.split(".");
+	//var srcFileKey = srcFilenameArr[0];
+	//var srcFileExt = srcFilenameArr[1].toLowerCase();
+	//console.log($invnumber)
+	
+
+    var params = {
+        TableName: 'Invdbpoc',
+        Item: {
+            invnumber: invnumber,
+            Invfile: Invfile,
+            invdate: invdate,
+            customer_name: customer_name
+        }
+    };
+
+    dynamo.putItem(params, context.done);
+};
