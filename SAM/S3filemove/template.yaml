@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  Lambdamovefiles:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: hello_world/
+      Handler: app.lambda_handler
+      Runtime: python2.7
+      Timeout: 60
+      Policies: AWSLambdaExecute
+      Events:
+        S3lambdaEvent:
+          Type: S3
+          Properties:
+            Bucket: !Ref Bucket1
+            Events: s3:ObjectCreated:*
+
+  Bucket1:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: lambda-bucket-sma1
+
